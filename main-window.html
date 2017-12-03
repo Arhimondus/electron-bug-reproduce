@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+const { getCurrentWindow, BrowserWindow } = require('electron').remote,
+	{ ipcRenderer } = require('electron');
+	
+function showModalSimple() {
+	let child = new BrowserWindow({ width: 440, height: 300, parent: getCurrentWindow(), modal: true, show: true, resizable: false });
+	child.setMenu(null);
+	child.loadURL(`file://${__dirname}/modal-window.html`);
+}
+
+function showModalIpc() {
+	ipcRenderer.send('showModal', getCurrentWindow());
+}
+
+function showModalIpcByParentId() {
+	ipcRenderer.send('showModalByParentId', getCurrentWindow().id);
+}
+
+function showModalIpcSync() {
+	ipcRenderer.sendSync('showModal', getCurrentWindow());
+}
+
+function showModalIpcByParentIdSync() {
+	ipcRenderer.sendSync('showModalByParentId', getCurrentWindow().id);
+}
+
+function showAlreadyCreatedWindow() {
+	ipcRenderer.send('showAlreadyCreatedWindow');
+}
+
+function showAlreadyCreatedWindowSync() {
+	ipcRenderer.sendSync('showAlreadyCreatedWindow');
+}
+</script>
+<h1>I'm main parent window!</h1>
+<button onclick="javascript:showModalSimple()">Open modal simple</button>
+
+<button onclick="javascript:showModalIpc()">Open modal from Ipc</button>
+<button onclick="javascript:showModalIpcByParentId()">Open modal from Ipc by parentId</button>
+
+<button onclick="javascript:showModalIpcSync()">(sync) Open modal from Ipc</button>
+<button onclick="javascript:showModalIpcByParentIdSync()">(sync) Open modal from Ipc by parentId</button>
+
+<button onclick="javascript:showAlreadyCreatedWindow()">Open already created modal from Ipc</button>
+<button onclick="javascript:showAlreadyCreatedWindowSync()">(sync) Open already created modal from Ipc</button>
+
+<input type="text" value="Input text"/>
+<input type="number" value="5"/>
+<textarea>Textarea</textarea>
+<p>Some parent content</p>
+<button onclick="javascript:getCurrentWindow().close()">Close me</button>
+<button onclick="javascript:getCurrentWindow().destroy()">Destroy me</button>
+</body>
+</html>

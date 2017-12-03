@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+const { getCurrentWindow } = require('electron').remote;
+</script>
+<h1>I'm a modal child window!</h1>
+<p>Some content</p>
+<button onclick="javascript:getCurrentWindow().close()">Close me</button>
+<button onclick="javascript:getCurrentWindow().destroy()">Destroy me</button>
+</body>
+</html>
